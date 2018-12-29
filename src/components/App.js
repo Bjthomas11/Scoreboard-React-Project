@@ -35,6 +35,35 @@ class App extends Component {
     }));
   };
 
+  handleAddPlayer = name => {
+    this.setState(prevState => {
+      return {
+        players: [
+          // represents all exisiting players array
+          ...prevState.players,
+          {
+            // name: name
+            name,
+            score: 0,
+            id: (this.prevPlayerId += 1)
+          }
+        ]
+      };
+    });
+  };
+
+  getHighScore = () => {
+    const scores = this.state.players.map(p => p.score);
+    const highScore = Math.max(...scores);
+    if (highScore) {
+      return highScore;
+    }
+    return null;
+  };
+
+  // player id counter
+  prevPlayerId = 4;
+
   handleRemovePlayer = id => {
     this.setState(prevState => {
       return {
@@ -44,9 +73,10 @@ class App extends Component {
   };
 
   render() {
+    const highScore = this.getHighScore();
     return (
       <div className="scoreboard">
-        <Header title="Scoreboard" players={this.state.players} />
+        <Header players={this.state.players} />
 
         {/* Players list */}
         {this.state.players.map((player, index) => (
@@ -58,10 +88,11 @@ class App extends Component {
             key={player.id.toString()}
             changeScore={this.handleScoreChange}
             removePlayer={this.handleRemovePlayer}
+            isHighScore={highScore === player.score}
           />
         ))}
 
-        <AddPlayerForm />
+        <AddPlayerForm addPlayer={this.handleAddPlayer} />
       </div>
     );
   }

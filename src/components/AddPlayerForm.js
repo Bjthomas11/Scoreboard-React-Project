@@ -1,23 +1,24 @@
 import React, { Component } from "react";
 
+// Renered as class
 class AddPlayerForm extends Component {
-  state = {
-    value: ""
-  };
+  // create.Ref methods is easier and quicker to get value from forms
+  playerInput = React.createRef();
 
-  handleValueChange = e => {
+  handleSubmitButton = e => {
     e.preventDefault();
-    this.setState({ value: e.target.value });
+    this.props.addPlayer(this.playerInput.current.value);
+    e.currentTarget.reset();
   };
 
   render() {
-    console.log(this.state.value);
+    console.log(this.playerInput);
+    // console.log(this.state.value);
     return (
-      <form>
+      <form onSubmit={this.handleSubmitButton}>
         <input
           type="text"
-          value={this.state.value}
-          onChange={this.handleValueChange}
+          ref={this.playerInput}
           placeholder="Enter a player name"
         />
 
@@ -26,5 +27,24 @@ class AddPlayerForm extends Component {
     );
   }
 }
+
+// Rendering as a function
+// const AddPlayerForm = ({ addPlayer }) => {
+//   let playerInput = React.createRef();
+
+//   let handleSubmitButton = e => {
+//     e.preventDefault();
+//     addPlayer(playerInput.current.value);
+//     e.currentTarget.reset();
+//   };
+
+//   return (
+//     <form onSubmit={handleSubmitButton}>
+//       <input type="text" ref={playerInput} placeholder="Enter a player name" />
+
+//       <input type="submit" value="Add Player" />
+//     </form>
+//   );
+// };
 
 export default AddPlayerForm;
